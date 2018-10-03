@@ -11,6 +11,7 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 import logging
+import pyaml
 
 from botocore.compat import json
 
@@ -96,6 +97,12 @@ class JSONFormatter(FullyBufferedFormatter):
                     ensure_ascii=False)
             stream.write('\n')
 
+class YAMLFormatter(FullyBufferedFormatter):
+
+    def _format_response(self, command_name, response, stream):
+        if response != {}:
+            pyaml.dump(response, stream)
+            stream.write('\n')
 
 class TableFormatter(FullyBufferedFormatter):
     """Pretty print a table from a given response.
@@ -265,6 +272,8 @@ class TextFormatter(Formatter):
 def get_formatter(format_type, args):
     if format_type == 'json':
         return JSONFormatter(args)
+    elif format_type == 'yaml':
+        return YAMLFormatter(args)
     elif format_type == 'text':
         return TextFormatter(args)
     elif format_type == 'table':

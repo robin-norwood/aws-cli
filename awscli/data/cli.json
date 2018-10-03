@@ -23,6 +23,7 @@
         "output": {
             "choices": [
                 "json",
+                "yaml",
                 "text",
                 "table"
             ],
